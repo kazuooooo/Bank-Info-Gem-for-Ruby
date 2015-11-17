@@ -21,3 +21,10 @@ doc.xpath('//table[@class="yjw_table"]//tr').each do |node|
     p cnode.inner_text
   end
 end
+
+doc.css('table.yjw_table tr').each do |node|
+  #さらにその中のsmall要素を探す
+  node.css('td small').each do |cnode|
+    p cnode.inner_text
+  end
+end
