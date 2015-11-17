@@ -12,8 +12,12 @@ end
 
 # htmlをパース(解析)してObjectを作成
 doc = Nokogiri::HTML.parse(html, charset)
+# 取得したいtrを
 
-doc.xpath('//table[@class="yjw_table"]//small').each do |node|
-  # title
-  p node.inner_text
+#tr要素をxpathで探す
+doc.xpath('//table[@class="yjw_table"]//tr').each do |node|
+  #さらにその中のsmall要素を探す
+  node.xpath('.//td/small').each do |cnode|
+    p cnode.inner_text
+  end
 end
