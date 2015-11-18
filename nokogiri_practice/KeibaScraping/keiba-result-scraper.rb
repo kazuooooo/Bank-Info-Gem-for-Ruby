@@ -25,16 +25,16 @@ class KeibaResultScraper
 
   def scrape_race
     # レースオブジェクトを生成
-    race_obj = RaceResult.new
+    race = RaceResult.new
     # 場所を取得
     race_place_desc = @@doc.css('#raceTitDay').inner_text
     race_place_desc.match(/(東京|福島|京都)/) do |md|
-      race_obj.place = md[0]
+    race.place = md[0]
     end
     # 何レース目かを取得
-    race_obj.race_num = @@doc.css('#raceNo').inner_text
+    race.num = @@doc.css('#raceNo').inner_text
     # レース名を取得
-    race_obj.race_name = @@doc.css('h1.fntB').inner_text.gsub(/[\n]/,"")
+    race.name = @@doc.css('h1.fntB').inner_text.gsub(/[\n]/,"")
     scrape_race_result
   end
 
@@ -48,15 +48,16 @@ class KeibaResultScraper
     nodeset.pop
     # horce_resultに各値を入れていく
     nodeset.each do |node|
-      horce = HorceResult.new
-      horce.ranking = node.css('td')[0].inner_text.gsub(/[\n]/,"") # 順位
-      horce.number = node.css('td')[3].inner_text # 馬番
-      horce.name = node.css('td')[4].inner_text # 馬名
-      horce.jockey = node.css('td')[5].inner_text # 騎手名
-      horce.popularity = node.css('td')[12].inner_text # 人気順
-      horce.odds = node.css('td')[13].inner_text # オッズ
-      horce_results.push(horce)
+      horce_result = HorceResult.new
+      horce_result.ranking = node.css('td')[0].inner_text.gsub(/[\n]/,"") # 順位
+      horce_result.number = node.css('td')[3].inner_text # 馬番
+      horce_result.name = node.css('td')[4].inner_text # 馬名
+      horce_result.jockey = node.css('td')[5].inner_text # 騎手名
+      horce_result.popularity = node.css('td')[12].inner_text # 人気順
+      horce_result.odds = node.css('td')[13].inner_text # オッズ
+      horce_results.push(horce_result)
     end
+    # resultsを返す
     return horce_results
   end
 end

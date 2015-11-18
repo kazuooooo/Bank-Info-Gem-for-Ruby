@@ -1,3 +1,3 @@
 class RaceResult
-  attr_accessor :place, :race_num, :race_name, :race_result
+  attr_accessor :place, :num, :name, :result
 end
