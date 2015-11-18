@@ -13,7 +13,7 @@ class KeibaResultScraper
   
   def setup_scraping
     #　スクレイピング先のURL
-    url = 'http://keiba.yahoo.co.jp/race/result/1508040901/'
+    url = 'http://keiba.yahoo.co.jp/race/result/1505040911/'
     charset = nil
     html = open(url) do |f|
       charset = f.charset #文字種別を取得
@@ -33,13 +33,20 @@ class KeibaResultScraper
     end
     # 何レース目かを取得
     race_obj.race_num = @@doc.css('#raceNo').inner_text
-    #レース名を取得
+    # レース名を取得
     race_obj.race_name = @@doc.css('h1.fntB').inner_text.gsub(/[\n]/,"")
+    scrape_race_result
   end
 
   def scrape_race_result
-    @@doc.css('table#resultLs tr').each do |node|
-      # p '着順' + node.css('td.txC:nth-child(1)').inner_text
+    # テーブルの列を取得
+    nodeset = @@doc.css('table#resultLs tr')
+    # 最初と最後はヘッダー行なので削除
+    nodeset.shift
+    nodeset.pop
+    # horce_resultに各値を入れていく
+    nodeset.each do |node|
+      p '着順' + node.css("td.txC:nth-child(1)").inner_text
       # p '枠番' + node.css('td.txC span[class^="wk"]').inner_text
       # p '馬番' + node.css('td.txC:nth-child(3)').inner_text
       # p '馬名' + node.css('td.fntN.txL a').inner_text
