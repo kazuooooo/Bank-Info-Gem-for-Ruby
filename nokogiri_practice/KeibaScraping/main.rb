@@ -1,5 +1,6 @@
-require './keiba-result-scraper.rb'
-scraper = KeibaResultScraper.new
+require './race_scraper.rb'
+scraper = RaceScraper.new
 
-# レース名を指定してレースの情報を取得
+# レースのURLを指定してレースの情報を取得できる
+
 # その中にある馬の各パラメータから検索して、horce_resultを取得できる
