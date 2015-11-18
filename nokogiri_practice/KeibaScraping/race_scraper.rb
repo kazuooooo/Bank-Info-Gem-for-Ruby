@@ -7,18 +7,19 @@ require './horce.rb'
 class RaceScraper
 
   def scrape_race_from_list(list_url)
+    races = []
     parsed_doc = get_parsed_doc(list_url)
-    binding.pry
-    nodeset = parsed_doc.css('table.scheLs a')
+    nodeset = parsed_doc.css('table.scheLs td.wsLB a')
     nodeset.each do |node|
-      node.inner_text
+      race = scrape_race('http://keiba.yahoo.co.jp'.concat(node['href']))
+      races.push(race)
     end
+    return races;
   end
 
   def scrape_race(race_url)
     # スクレイピングの準備
     parsed_doc = get_parsed_doc(race_url)
-    binding.pry
     # レースオブジェクトを生成
     race = Race.new
     # 場所を取得
@@ -32,7 +33,6 @@ class RaceScraper
     race.name = parsed_doc.css('h1.fntB').inner_text.gsub(/[\n]/,"")
     # レース結果を取得
     race.result = scrape_race_result(parsed_doc)
-    binding.pry
     return race
   end
 
