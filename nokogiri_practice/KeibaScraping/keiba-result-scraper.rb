@@ -1,11 +1,40 @@
 require 'open-uri'
 require 'nokogiri'
+require './race-result.rb'
+
 class KeibaResultScraper 
+  
   def initialize
-    scrape_keiba_result
+    scrape_race
+  end
+  
+  def scrape_race
+    #　スクレイピング先のURL
+    url = 'http://keiba.yahoo.co.jp/race/result/1508040901/'
+
+    charset = nil
+    html = open(url) do |f|
+      charset = f.charset #文字種別を取得
+      f.read #htmlを読み込んで変数に渡す
+    end
+
+    # htmlを解析してObjectを作成
+    doc = Nokogiri::HTML.parse(html,charset)
+
+    # レースオブジェクトを生成
+    race_obj = RaceResult.new
+    # 場所を取得
+    race_place_desc = doc.css('#raceTitDay').inner_text
+    race_place_desc.match(/(東京|福島|京都)/) do |md|
+      race_obj.place = md[0]
+    end
+    # 何レース目かを取得
+    race_obj.race_num = doc.css('#raceNo').inner_text
+    #レース名を取得
+    race_obj.race_name = doc.css('h1.fntB').inner_text.gsub(/[\n]/,"")
   end
 
-  def scrape_keiba_result
+  def scrape_race_result
     #　スクレイピング先のURL
     url = 'http://keiba.yahoo.co.jp/race/result/1505040911/'
 
@@ -20,15 +49,13 @@ class KeibaResultScraper
 
     doc.css('table#resultLs tr').each do |node|
        p '着順' + node.css('td.txC:nth-child(1)').inner_text
-       p '枠番' + node.css('td.txC span[class^="wk"]').inner_text
+       # p '枠番' + node.css('td.txC span[class^="wk"]').inner_text
        p '馬番' + node.css('td.txC:nth-child(3)').inner_text
        p '馬名' + node.css('td.fntN.txL a').inner_text
-       p '性齢' + node.css('td.txL:nth-child(5)').inner_text
-       p 'タイム' + node.css('td:nth-child(7)').inner_text
+       # p '性齢' + node.css('td.txL:nth-child(5)').inner_text
+       # p 'タイム' + node.css('td:nth-child(7)').inner_text
        p '人気' + node.css('td:nth-child(13)').inner_text
        p 'オッズ' + node.css('td:nth-child(14)').inner_text
     end
   end
 end
-
-obj = KeibaResultScraper.new
