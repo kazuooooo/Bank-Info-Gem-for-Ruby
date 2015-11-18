@@ -6,9 +6,9 @@ require './horce.rb'
 
 class RaceScraper
 
-  def scrape_race
+  def scrape_race(race_url)
     # スクレイピングの準備
-    setup_scraping
+    setup_scraping(race_url)
     # レースオブジェクトを生成
     race = Race.new
     # 場所を取得
@@ -22,14 +22,14 @@ class RaceScraper
     race.name = @doc.css('h1.fntB').inner_text.gsub(/[\n]/,"")
     # レース結果を取得
     race.result = scrape_race_result
-    binding.pry
   end
 
   private
-  
-  def setup_scraping
+
+  def setup_scraping(race_url)
+    binding.pry
     #　スクレイピング先のURL
-    url = 'http://keiba.yahoo.co.jp/race/result/1505040911/'
+    url = race_url
     charset = nil
     html = open(url) do |f|
       charset = f.charset # 文字種別を取得
