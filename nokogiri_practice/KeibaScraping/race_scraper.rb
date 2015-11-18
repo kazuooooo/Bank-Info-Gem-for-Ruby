@@ -20,10 +20,13 @@ class RaceScraper
     race.num = @doc.css('#raceNo').inner_text
     # レース名を取得
     race.name = @doc.css('h1.fntB').inner_text.gsub(/[\n]/,"")
+    # レース結果を取得
     race.result = scrape_race_result
     binding.pry
   end
 
+  private
+  
   def setup_scraping
     #　スクレイピング先のURL
     url = 'http://keiba.yahoo.co.jp/race/result/1505040911/'
