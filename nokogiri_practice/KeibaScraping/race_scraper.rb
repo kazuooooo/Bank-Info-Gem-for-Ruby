@@ -6,18 +6,6 @@ require './horce.rb'
 
 class RaceScraper
 
-  def setup_scraping
-    #　スクレイピング先のURL
-    url = 'http://keiba.yahoo.co.jp/race/result/1505040911/'
-    charset = nil
-    html = open(url) do |f|
-      charset = f.charset # 文字種別を取得
-      f.read # htmlを読み込んで変数に渡す
-    end
-    # htmlを解析してObjectを作成
-    @doc = Nokogiri::HTML.parse(html,charset)
-  end
-
   def scrape_race
     # スクレイピングの準備
     setup_scraping
@@ -32,7 +20,20 @@ class RaceScraper
     race.num = @doc.css('#raceNo').inner_text
     # レース名を取得
     race.name = @doc.css('h1.fntB').inner_text.gsub(/[\n]/,"")
-    scrape_race_result
+    race.result = scrape_race_result
+    binding.pry
+  end
+
+  def setup_scraping
+    #　スクレイピング先のURL
+    url = 'http://keiba.yahoo.co.jp/race/result/1505040911/'
+    charset = nil
+    html = open(url) do |f|
+      charset = f.charset # 文字種別を取得
+      f.read # htmlを読み込んで変数に渡す
+    end
+    # htmlを解析してObjectを作成
+    @doc = Nokogiri::HTML.parse(html,charset)
   end
 
   def scrape_race_result
@@ -58,5 +59,5 @@ class RaceScraper
     p horces
     return horces
   end
-  
+
 end
