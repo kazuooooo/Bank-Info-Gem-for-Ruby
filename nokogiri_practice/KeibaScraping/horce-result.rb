@@ -1,3 +1,3 @@
 class HorceResult
-  attr_accessor :ranking, :number, :name, :popularity, :odds
+  attr_accessor :ranking, :number, :name, :jockey, :popularity, :odds
 end

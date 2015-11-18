@@ -39,6 +39,8 @@ class KeibaResultScraper
   end
 
   def scrape_race_result
+    # horce_resultの配列
+    horce_results = []
     # テーブルの列を取得
     nodeset = @@doc.css('table#resultLs tr')
     # 最初と最後はヘッダー行なので削除
@@ -46,14 +48,15 @@ class KeibaResultScraper
     nodeset.pop
     # horce_resultに各値を入れていく
     nodeset.each do |node|
-      p '着順' + node.css("td.txC:nth-child(1)").inner_text
-      # p '枠番' + node.css('td.txC span[class^="wk"]').inner_text
-      # p '馬番' + node.css('td.txC:nth-child(3)').inner_text
-      # p '馬名' + node.css('td.fntN.txL a').inner_text
-      # p '性齢' + node.css('td.txL:nth-child(5)').inner_text
-      # p 'タイム' + node.css('td:nth-child(7)').inner_text
-      # p '人気' + node.css('td:nth-child(13)').inner_text
-      # p 'オッズ' + node.css('td:nth-child(14)').inner_text
+      horce = HorceResult.new
+      horce.ranking = node.css('td')[0].inner_text.gsub(/[\n]/,"") # 順位
+      horce.number = node.css('td')[3].inner_text # 馬番
+      horce.name = node.css('td')[4].inner_text # 馬名
+      horce.jockey = node.css('td')[5].inner_text # 騎手名
+      horce.popularity = node.css('td')[12].inner_text # 人気順
+      horce.odds = node.css('td')[13].inner_text # オッズ
+      horce_results.push(horce)
     end
+    return horce_results
   end
 end
