@@ -27,7 +27,22 @@ class KeibaCommand < Thor
       puts "csv created!!"
     end
   end
-  
+
+  desc "getraces race list url", "return 10 about racedata from racelistpage"
+  option :csv
+  def getraces(race_list_url)
+    race_scraper = RaceScraper.new
+    races = race_scraper.scrape_race_from_list(race_list_url)
+    races.each {|race|
+      display_race_data(race)
+    }
+    if options[:csv]
+      csv_generator = CSVGenerator.new
+      csv_generator.generate_races_csv(races)
+      puts "csv created!!"
+    end
+  end
+
   no_commands do
     def display_race_data(race)
       puts race.place

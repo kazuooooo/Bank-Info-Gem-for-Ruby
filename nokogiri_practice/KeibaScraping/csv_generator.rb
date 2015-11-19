@@ -3,6 +3,7 @@ require 'pry'
 
 class CSVGenerator
   def generate_races_csv(races_data)
+    # binding.pry
     races_data.each do |race_data|
       generate_race_csv(race_data)
     end
