@@ -15,6 +15,8 @@ class RaceURLConverter
         return 'http://keiba.yahoo.co.jp/race/list/15080502/'
       when 'fukushima' then
         return 'http://keiba.yahoo.co.jp/race/list/15030304/'
+      else
+        raise ArgumentError, "Please Input existing place 'tokyo' or 'kyoto' or 'fukushima'"
     end  
   end
 
@@ -22,7 +24,7 @@ class RaceURLConverter
     #:TODO Refactorring
     race_scraper = RaceScraper.new
     parsed_doc = race_scraper.get_parsed_doc(race_list_url)
-    node = parsed_doc.css('table.scheLs td.wsLB a')[num - 1]
+    node = parsed_doc.css('table.scheLs td.wsLB a')[num.to_i - 1]
     url = 'http://keiba.yahoo.co.jp'.concat(node['href'])
   end
 end
