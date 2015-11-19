@@ -1,0 +1,59 @@
+require 'thor'
+require './race_scraper.rb'
+require './csv_generator.rb'
+
+class KeibaCommand < Thor
+  # desc "hello Name", "say hello to Name"
+  # option :from, :required => true
+  # option :yell, :type => :boolean
+
+  # def hello(name)
+  #   output = []
+  #   output << "from: #{options[:from]}" if options[:from]
+  #   output << "Hello #{name}"
+  #   output = output.join("\n")
+  #   puts options[:yell] ? output.upcase : output
+  # end
+
+  desc "getrace raceurl", "return racedata from racepage"
+  option :csv
+  def getrace(race_url)
+    race_scraper = RaceScraper.new
+    race = race_scraper.scrape_race(race_url)
+    display_race_data(race)
+    if options[:csv]
+      csv_generator = CSVGenerator.new
+      csv_generator.generate_race_csv(race)
+      puts "csv created!!"
+    end
+  end
+  
+  no_commands do
+    def display_race_data(race)
+      puts race.place
+      puts race.num
+      puts race.name
+      puts %w("着順", "馬番", "名前", "騎手名", "人気", "オッズ").join('  ')
+      race.result.each do |horce|
+        horce_array = [
+                        horce.ranking,
+                        horce.number, 
+                        horce.name, 
+                        horce.jockey, 
+                        horce.popularity, 
+                        horce.odds
+                      ]
+        puts ((horce_array).join('  '))
+      end
+    end
+  end
+  # getrace : 指定したURLのレース結果を返す
+  # option --csv : csvファイルを生成する
+
+  # getraces : 指定したURLのレース一覧から全レースの結果を返す
+  # option --csv : csvファイルを生成する
+end
+
+
+
+KeibaCommand.start(ARGV)
