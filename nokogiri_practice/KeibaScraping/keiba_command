@@ -28,7 +28,7 @@ class KeibaCommand < Thor
     end
   end
 
-  desc "getraces race place", "return 10 about racedata from racelistpage"
+  desc "getraces raceplace", "return 10 about racedata from racelistpage"
   option :csv
   def getraces(place)
     race_scraper = RaceScraper.new
