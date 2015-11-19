@@ -15,11 +15,11 @@ class KeibaCommand < Thor
   #   puts options[:yell] ? output.upcase : output
   # end
 
-  desc "getrace raceurl", "return racedata from racepage"
+  desc "getrace place('tokyo' or 'kyoto' or 'fukushima'), race_number", "return racedata from racepage"
   option :csv
-  def getrace(race_url)
+  def getrace(place, race_number)
     race_scraper = RaceScraper.new
-    race = race_scraper.scrape_race(race_url)
+    race = race_scraper.scrape_race(place, race_number)
     display_race_data(race)
     if options[:csv]
       csv_generator = CSVGenerator.new
@@ -28,11 +28,11 @@ class KeibaCommand < Thor
     end
   end
 
-  desc "getraces race list url", "return 10 about racedata from racelistpage"
+  desc "getraces race place", "return 10 about racedata from racelistpage"
   option :csv
-  def getraces(race_list_url)
+  def getraces(place)
     race_scraper = RaceScraper.new
-    races = race_scraper.scrape_race_from_list(race_list_url)
+    races = race_scraper.scrape_race_from_list(place)
     races.each {|race|
       display_race_data(race)
     }
