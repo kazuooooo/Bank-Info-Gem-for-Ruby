@@ -62,8 +62,8 @@ class RaceScraper
     nodeset.each do |node|
       horce = Horce.new
       horce.ranking = node.css('td')[0].inner_text.gsub(/[\n]/,"") # 順位
-      horce.number = node.css('td')[3].inner_text # 馬番
-      horce.name = node.css('td')[4].inner_text # 馬名
+      horce.number = node.css('td')[1].inner_text # 馬番
+      horce.name = node.css('td')[3].inner_text # 馬名
       horce.jockey = node.css('td')[5].inner_text # 騎手名
       horce.popularity = node.css('td')[12].inner_text # 人気順
       horce.odds = node.css('td')[13].inner_text # オッズ
