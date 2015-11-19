@@ -3,21 +3,28 @@ require 'open-uri'
 require 'nokogiri'
 require './race.rb'
 require './horce.rb'
+require './race_url_converter'
 
 class RaceScraper
 
-  def scrape_race_from_list(list_url)
+  def scrape_race_from_list(place)
+    race_url_converter = RaceURLConverter.new
+    list_url = race_url_converter.get_race_list_url(place)
     races = []
     parsed_doc = get_parsed_doc(list_url)
     nodeset = parsed_doc.css('table.scheLs td.wsLB a')
+    race_count = 1
     nodeset.each do |node|
-      race = scrape_race('http://keiba.yahoo.co.jp'.concat(node['href']))
+      race = scrape_race(place, race_count)
       races.push(race)
+      race_count += 1
     end
     return races;
   end
 
-  def scrape_race(race_url)
+  def scrape_race(place, num)
+    race_url_converter = RaceURLConverter.new
+    race_url = race_url_converter.convert_race_to_url(place, num)
     # スクレイピングの準備
     parsed_doc = get_parsed_doc(race_url)
     # レースオブジェクトを生成
@@ -36,8 +43,6 @@ class RaceScraper
     return race
   end
 
-  private
-
   def get_parsed_doc(url)
     #　スクレイピング先のURL
     url = url
@@ -50,6 +55,7 @@ class RaceScraper
     return Nokogiri::HTML.parse(html,charset)
   end
 
+  private
   def scrape_race_result(parsed_doc)
     # horceの配列
     horces = []
