@@ -37,7 +37,7 @@ class RaceScraper
     # 何レース目かを取得
     race.num = parsed_doc.css('#raceNo').inner_text
     # レース名を取得
-    race.name = parsed_doc.css('h1.fntB').inner_text.gsub(/[\n]/,"")
+    race.name = parsed_doc.css('h1.fntB').inner_text.gsub(/[\n]/,'')
     # レース結果を取得
     race.result = scrape_race_result(parsed_doc)
     return race
@@ -67,7 +67,7 @@ class RaceScraper
     # horceに各値を入れていく
     nodeset.each do |node|
       horce = Horce.new
-      horce.ranking = node.css('td')[0].inner_text.gsub(/[\n]/,"") # 順位
+      horce.ranking = node.css('td')[0].inner_text.gsub(/[\n]/,'') # 順位
       horce.number = node.css('td')[1].inner_text # 馬番
       horce.name = node.css('td')[3].inner_text # 馬名
       horce.jockey = node.css('td')[5].inner_text # 騎手名

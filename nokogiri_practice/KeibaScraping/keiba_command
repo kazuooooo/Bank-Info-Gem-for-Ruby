@@ -3,19 +3,8 @@ require './race_scraper.rb'
 require './csv_generator.rb'
 
 class KeibaCommand < Thor
-  # desc "hello Name", "say hello to Name"
-  # option :from, :required => true
-  # option :yell, :type => :boolean
 
-  # def hello(name)
-  #   output = []
-  #   output << "from: #{options[:from]}" if options[:from]
-  #   output << "Hello #{name}"
-  #   output = output.join("\n")
-  #   puts options[:yell] ? output.upcase : output
-  # end
-
-  desc "getrace place('tokyo' or 'kyoto' or 'fukushima'), race_number", "return racedata from racepage"
+  desc 'getrace place("tokyo" or "kyoto" or "fukushima"), race_number', 'return racedata from racepage'
   option :csv
   def getrace(place, race_number)
     race_scraper = RaceScraper.new
@@ -24,11 +13,11 @@ class KeibaCommand < Thor
     if options[:csv]
       csv_generator = CSVGenerator.new
       csv_generator.generate_race_csv(race)
-      puts "csv created!!"
+      puts 'csv created!!'
     end
   end
 
-  desc "getraces raceplace", "return 10 about racedata from racelistpage"
+  desc 'getraces raceplace', 'return 10 about racedata from racelistpage'
   option :csv
   def getraces(place)
     race_scraper = RaceScraper.new
@@ -39,7 +28,7 @@ class KeibaCommand < Thor
     if options[:csv]
       csv_generator = CSVGenerator.new
       csv_generator.generate_races_csv(races)
-      puts "csv created!!"
+      puts 'csv created!!'
     end
   end
 
@@ -48,27 +37,21 @@ class KeibaCommand < Thor
       puts race.place
       puts race.num
       puts race.name
-      puts %w("着順", "馬番", "名前", "騎手名", "人気", "オッズ").join('  ')
+      puts %w('着順', '馬番', '名前', '騎手名', '人気', 'オッズ').join('  ')
       race.result.each do |horce|
         horce_array = [
-                        horce.ranking,
-                        horce.number, 
-                        horce.name, 
-                        horce.jockey, 
-                        horce.popularity, 
-                        horce.odds
-                      ]
+          horce.ranking,
+          horce.number, 
+          horce.name, 
+          horce.jockey, 
+          horce.popularity, 
+          horce.odds
+        ]
         puts ((horce_array).join('  '))
       end
     end
   end
-  # getrace : 指定したURLのレース結果を返す
-  # option --csv : csvファイルを生成する
 
-  # getraces : 指定したURLのレース一覧から全レースの結果を返す
-  # option --csv : csvファイルを生成する
 end
-
-
 
 KeibaCommand.start(ARGV)
