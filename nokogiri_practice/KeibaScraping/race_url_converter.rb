@@ -16,16 +16,18 @@ class RaceURLConverter
   # @param [String] place 競馬場を指定('tokyo' or 'kyoto' or 'fukushima')
   # @return race_list_url レース一覧のURL
   def get_race_list_url(place)
+    race_list_url = ''
     case place
       when 'tokyo' then
-        return 'http://keiba.yahoo.co.jp/race/list/15050502/'
+        race_list_url = 'http://keiba.yahoo.co.jp/race/list/15050502/'
       when 'kyoto' then
-        return 'http://keiba.yahoo.co.jp/race/list/15080502/'
+        race_list_url = 'http://keiba.yahoo.co.jp/race/list/15080502/'
       when 'fukushima' then
-        return 'http://keiba.yahoo.co.jp/race/list/15030304/'
+        race_list_url = 'http://keiba.yahoo.co.jp/race/list/15030304/'
       else
         raise ArgumentError, "Please Input existing place 'tokyo' or 'kyoto' or 'fukushima'"
-    end  
+    end
+    return race_list_url
   end
 
   # レースの場所からレース一覧のURLを取得

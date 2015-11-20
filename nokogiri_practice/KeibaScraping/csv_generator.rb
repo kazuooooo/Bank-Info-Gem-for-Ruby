@@ -27,7 +27,7 @@ class CSVGenerator
           horce.name,
           horce.jockey,
           horce.popularity,
-          horce.oddsm
+          horce.odds
         ]
       end
     end

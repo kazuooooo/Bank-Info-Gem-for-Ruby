@@ -8,11 +8,11 @@ class KeibaCommand < Thor
   
   desc 'getrace place("tokyo" or "kyoto" or "fukushima"), race_number', 'return racedata from racepage'
   option :csv
-  # コマンドラインからレース結果を取得
+  # コマンドラインから場所とレース順を指定してレース結果を出力
   # @param [String] place 競馬場を指定('tokyo' or 'kyoto' or 'osaka')
   # @param [Int] race_number 第何レースかを指定
   # @option --csv CSVファイルを生成
-  # @return [String] race_result レース結果が出力される
+  # @return [nil]
   def getrace(place, race_number)
     race_scraper = RaceScraper.new
     race = race_scraper.scrape_race(place, race_number)
@@ -26,10 +26,10 @@ class KeibaCommand < Thor
 
   desc 'getraces raceplace', 'return 10 about racedata from racelistpage'
   option :csv
-  # コマンドラインからレース結果一覧を取得
+  # コマンドラインから場所を指定してレース結果を出力
   # @param [String] place 競馬場を指定('tokyo' or 'kyoto' or 'osaka')
   # @option --csv CSVファイルを生成
-  # @return [String] race_result レース結果一覧が出力される
+  # @return [nil]
   def getraces(place)
     race_scraper = RaceScraper.new
     races = race_scraper.scrape_race_from_list(place)
@@ -44,9 +44,9 @@ class KeibaCommand < Thor
   end
 
   no_commands do
-    # レース結果を画面に出力する
+    # 指定したレースのレース結果をレース結果を画面に出力する
     # @param [Race] race レースオブジェクト
-    # @return [String] race_result レース結果が返される
+    # @return [nil]
     def display_race_data(race)
       puts race.place
       puts race.num
