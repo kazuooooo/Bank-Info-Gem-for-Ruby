@@ -1,0 +1,16 @@
+require 'thor'
+
+class MyCLI < Thor
+  desc "hello Name", "say hello to Name"
+  option :from, :required => true
+  option :yell, :type => :boolean
+  def hello(name)
+    output = []
+    output << "from: #{options[:from]}" if options[:from]
+    output << "Hello #{name}"
+    output = output.join("\n")
+    puts options[:yell] ? output.upcase : output
+  end
+end
+
+MyCLI.start(ARGV)

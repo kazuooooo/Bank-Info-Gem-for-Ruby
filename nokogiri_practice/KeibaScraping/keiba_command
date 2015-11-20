@@ -1,0 +1,71 @@
+require 'thor'
+require './race_scraper.rb'
+require './csv_generator.rb'
+require 'yard'
+
+class KeibaCommand < Thor
+
+  
+  desc 'getrace place("tokyo" or "kyoto" or "fukushima"), race_number', 'return racedata from racepage'
+  option :csv
+  # コマンドラインから場所とレース順を指定してレース結果を出力
+  # @param [String] place 競馬場を指定('tokyo' or 'kyoto' or 'osaka')
+  # @param [Int] race_number 第何レースかを指定
+  # @option --csv CSVファイルを生成
+  # @return [nil]
+  def getrace(place, race_number)
+    race_scraper = RaceScraper.new
+    race = race_scraper.scrape_race(place, race_number)
+    display_race_data(race)
+    if options[:csv]
+      csv_generator = CSVGenerator.new
+      csv_generator.generate_race_csv(race)
+      puts 'csv created!!'
+    end
+  end
+
+  desc 'getraces raceplace', 'return 10 about racedata from racelistpage'
+  option :csv
+  # コマンドラインから場所を指定してレース結果を出力
+  # @param [String] place 競馬場を指定('tokyo' or 'kyoto' or 'osaka')
+  # @option --csv CSVファイルを生成
+  # @return [nil]
+  def getraces(place)
+    race_scraper = RaceScraper.new
+    races = race_scraper.scrape_race_from_list(place)
+    races.each {|race|
+      display_race_data(race)
+    }
+    if options[:csv]
+      csv_generator = CSVGenerator.new
+      csv_generator.generate_races_csv(races)
+      puts 'csv created!!'
+    end
+  end
+
+  no_commands do
+    # 指定したレースのレース結果をレース結果を画面に出力する
+    # @param [Race] race レースオブジェクト
+    # @return [nil]
+    def display_race_data(race)
+      puts race.place
+      puts race.num
+      puts race.name
+      puts %w('着順', '馬番', '名前', '騎手名', '人気', 'オッズ').join('  ')
+      race.result.each do |horce|
+        horce_array = [
+          horce.ranking,
+          horce.number, 
+          horce.name, 
+          horce.jockey, 
+          horce.popularity, 
+          horce.odds
+        ]
+        puts ((horce_array).join('  '))
+      end
+    end
+  end
+
+end
+
+KeibaCommand.start(ARGV)
