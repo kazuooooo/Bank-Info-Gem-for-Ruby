@@ -1,14 +1,21 @@
 require 'csv'
 require 'pry'
+require 'yard'
 
 class CSVGenerator
-
+  
+  # Raceの一覧のCSVを生成 (ファイル名：race.csv)
+  # @param [Race[]] races_data Raceオブジェクトの配列
+  # @return [nil]
   def generate_races_csv(races_data)
     races_data.each do |race_data|
       generate_race_csv(race_data)
     end
   end
 
+  # RaceのCSVを生成 (ファイル名：race.csv)
+  # @param [Race] race_data Raceオブジェクト
+  # @return [nil]
   def generate_race_csv(race_data)
     CSV.open('race.csv', 'a+') do |csv|
       csv << [ race_data.place, race_data.num, race_data.name ]

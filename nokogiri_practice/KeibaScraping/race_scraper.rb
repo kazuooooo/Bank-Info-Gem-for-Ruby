@@ -4,9 +4,13 @@ require 'nokogiri'
 require './race.rb'
 require './horce.rb'
 require './race_url_converter'
+require 'yard'
 
 class RaceScraper
 
+  # レース一覧ページからレース情報をスクレイピングしてRaceオブジェクトの配列で返す
+  # @param [String] place 競馬場を指定('tokyo' or 'kyoto' or 'fukushima')
+  # @return [Race[]] races Raceオブジェクトの配列 
   def scrape_race_from_list(place)
     race_url_converter = RaceURLConverter.new
     list_url = race_url_converter.get_race_list_url(place)
@@ -22,6 +26,9 @@ class RaceScraper
     return races;
   end
 
+  # レース一結果ページからレース情報をスクレイピングしてRaceオブジェクトを返す
+  # @param [String] place 競馬場を指定('tokyo' or 'kyoto' or 'fukushima')
+  # @return [Race] race Raceオブジェクト
   def scrape_race(place, num)
     race_url_converter = RaceURLConverter.new
     race_url = race_url_converter.convert_race_to_url(place, num)
@@ -43,6 +50,9 @@ class RaceScraper
     return race
   end
 
+  # 指定したページのHTMLをパースして返す
+  # @param [String] url パースしたいページのURL
+  # @return [Object] parsed_doc パースしたオブジェクト
   def get_parsed_doc(url)
     #　スクレイピング先のURL
     url = url
@@ -56,6 +66,9 @@ class RaceScraper
   end
 
   private
+  # レース結果ページをスクレイピングしてhorceオブジェクトの各値に値を入れていく
+  # @param [Object] parsed_doc レース結果のページをパースしたオブジェクト
+  # @return [Horce[]] horces Horceオブジェクトの配列
   def scrape_race_result(parsed_doc)
     # horceの配列
     horces = []
